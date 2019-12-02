@@ -1,9 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>DELI-VERY</title>
-    </head>
-    <body>
-        <h1>Hello World!!!</h1>
-    </body>
+<head>
+    <title>BURGERS</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="/socket.io/socket.io.js" defer></script>
+
+    <script src="vue/vue.js" defer></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script src="js/vue_script.js" defer></script>
+    <link rel="stylesheet" href="css/deli-very.css">
+
+</head>
+<body>
+    <main id="myVue">
+        <header>
+            <img id="himg" src="http://www.bravuraresort.com/Upload/Header/Fast-Food_2286.jpg" alt="Span" title="header" type="img" height="auto" width="100%">
+            <h1>Välkommen till BurgerOnline!</h1>
+        </header>
+
+        <section id="burger">
+        <h2>Choose your burger</h2>
+        <p> Our great selection of vegetarian burgers </p>
+
+            <div class="wrapper">
+
+                <div v-for="burger in burgList">
+
+                    <h3> {{ burger.name }} </h3>
+                    <img :src="burger.img" width="300"> <br>
+                    {{ burger.kCal }} kCal <br>
+                <span v-if="burger.gluten" id="gl"> Contains <b>Gluten</b> <br> </span>
+                <span v-if="burger.lactose"> Contains <b> Lactose</b> <br> </span>
+                <span v-if="burger.veg"> <b> Vegan </b> </span>
+                    <p> Add to order: <input type="checkbox" v-model="chosenBurg" :value="burger.name"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="orderInfo">
+            <h2>Customer information</h2>
+            <p> This is where you provide necessary information</p>
+            <h3> Delivery information </h3>
+
+            <form>
+                <p>
+                    <label for="fullname">Full name</label><br>
+                    <input v-model="fullName" type="text" id="fullname" name="fn" required="required" placeholder="First- and Last name">
+                </p>
+                <p>
+                    <label for="email">E-mail</label><br>
+                    <input v-model="email" type="email" id="email" name="em" required="required" placeholder="E-mail address">
+                </p>
+
+                <p>
+                    <label for="payment">Payment options</label><br>
+                    <select v-model="payMethod" id="payment" name="pay">
+                        <option>Card</option>
+                        <option>Swish</option>
+                        <option selected="selected">Cash</option>
+                        <option>Direct bank payment</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label>Gender</label><br>
+                    <input v-model="gender" type="radio" name="gender" value="male">Male</input><br>
+                    <input v-model="gender" type="radio" name="gender" value="female">Female</input><br>
+                    <input v-model="gender" type="radio" name="gender" value="nonbinary">Non-binary</input><br>
+                    <input v-model="gender" type="radio" name="gender" value="undisclosed">Undisclosed</input><br>
+                </p>
+            </form>
+
+            <h2> Indicate point of delivery: </h2>
+            <a href="/dispatcher" target="_blank"></a>
+
+            <div class="view-box">
+
+                <div id="dots" v-on:click="displayOrder">
+                    <div v-bind:style="{ left: details.x + 'px', top: details.y + 'px'}">
+                        T
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                <button type="submit" v-on:click="ordered(), addOrder()"> Place my order! </button>
+
+                <span v-if="orderPlaced">
+                    <h2> Your order was successfully received: </h2>
+                    Name: {{ fullName }} <br>
+                    E-mail: {{ email }} <br>
+                    Location: {{ details }} <br>
+                    Payment method: {{ payMethod }} <br>
+
+                    Your burgers: <li v-for="burg in chosenBurg"> {{ burg }}</li>
+
+                    </span>
+
+
+    </main>
+
+<hr>
+<footer class="ending"> 2018 Hyp Burgers Inc</footer>
+</body>
 </html>
